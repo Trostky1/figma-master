@@ -1,0 +1,17 @@
+# Gotchas
+
+Each item was met in real use. Add new ones only with the user's yes.
+
+| # | Problem | Fix |
+|---|---|---|
+| 1 | `scopes = []` on a BOOLEAN variable throws "Invalid scope for this variable type". | Use `['ALL_SCOPES']`. |
+| 2 | A setup script fails halfway and leaves half-made variables. A later retry then makes duplicates. | Look up the collection first. Create only what is missing. |
+| 3 | Test 2 used an id that test 1 failed to make. It gave a confusing validation error. | Check each id exists before you use it. |
+| 4 | `setReactionsAsync` error text is very long and lists every action type. | Look for the line that names your field, such as "Required value missing at ... variableId". |
+| 5 | `CONDITIONAL` with an EQUALS expression throws "Invalid expression function or arguments". | Use a variable alias condition for boolean toggles. |
+| 6 | Changing `x` or rotation does not create a keyframe. | Write the track with `applyManualKeyframeTrack`. |
+| 7 | `get_screenshot` never shows motion. | Use the frame check loop in `motion.md`. |
+| 8 | Video links expire. | Read `availableUntil`. Download only with the user's yes. |
+| 9 | Page context resets to the first page on every `use_figma` call. | Switch pages with `setCurrentPageAsync` once per call. |
+| 10 | A text write fails if the font is not loaded. | Load the font first. Check the style name with `listAvailableFontsAsync`. |
+| 11 | The motion API is beta and gated by a flag. | Probe first (`motion.md`). |
