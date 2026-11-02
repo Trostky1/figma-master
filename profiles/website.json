@@ -1,0 +1,34 @@
+{
+  "format": "website",
+  "name": "Website (desktop, tablet, mobile)",
+  "status": "built",
+  "numbersAre": "working defaults. Test and change them with evidence. A style kit may override families, weights, colors, and shapes, never the minimum sizes or contrast.",
+  "canvas": {
+    "frames": [
+      { "name": "Desktop", "width": 1440, "mode": "Desktop" },
+      { "name": "Tablet", "width": 768, "mode": "Tablet" },
+      { "name": "Mobile", "width": 390, "mode": "Mobile" }
+    ],
+    "naming": "<Page> / <Breakpoint> <width>, for example Home / Mobile 390",
+    "structure": "One frame per page per breakpoint. Same sections, same order, same components, same variables."
+  },
+  "grid": {
+    "Desktop": { "columns": 12, "margin": 80, "gutter": 32 },
+    "Tablet": { "columns": 8, "margin": 40, "gutter": 24 },
+    "Mobile": { "columns": 4, "margin": 20, "gutter": 16 }
+  },
+  "type": { "bodyMin": 16, "captionMin": 13, "labelMin": 12, "absoluteFloor": 11, "maxFamilies": 3, "lineLength": { "min": 35, "max": 80 } },
+  "targets": { "pointer": 24, "touch": 44, "touchFrames": ["Tablet", "Mobile"], "note": "WCAG 2.2 AA minimum is 24. 44 is the recommended touch size." },
+  "contrast": { "body": 4.5, "large": 3, "largeTextPx": 24 },
+  "sections": { "required": ["nav", "hero", "footer"], "recommended": ["features or proof", "how it works", "faq", "call to action"] },
+  "layout": { "primaryCtaWithinPx": 900, "horizontalOverflow": false, "sameSectionOrderAcrossBreakpoints": true, "contentMaxWidth": 1280 },
+  "states": { "interactiveNeeds": ["hover", "focus", "disabled"] },
+  "responsive": {
+    "technique": "A Breakpoint variable collection with modes Desktop, Tablet, Mobile. Text styles and spacing bind to it. Each frame sets its explicit mode. Tested 2026-11-02.",
+    "collection": "Breakpoint"
+  },
+  "motion": { "hover": "100 to 200 ms", "entrance": "200 to 500 ms", "reducedMotion": "fade only" },
+  "export": { "built": ["Figma Design frames"], "later": ["Hugo theme", "Next.js", "plain HTML and CSS"] },
+  "skills": ["figma-use", "figma-generate-design", "figma-site", "figma-rip", "figma-sync"],
+  "notObservable": ["Real content length", "Page speed", "Keyboard order and screen reader output", "How it behaves between the three widths", "Browser rendering differences"]
+}

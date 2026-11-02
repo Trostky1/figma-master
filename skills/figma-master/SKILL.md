@@ -26,6 +26,7 @@ Always load `figma-use` before any `use_figma` call. Add the rows that match.
 |---|---|---|
 | Start any new design | `figma-new` (ours) | Asks the format and the style first. Nothing is drawn before both are settled. |
 | Slides deck in a chosen style | `figma-deck` (ours), `figma-use-slides`, `figma-use` | Needs a style kit. Profile: `profiles/presentation.json`. |
+| Responsive website (Desktop, Tablet, Mobile) in a chosen style | `figma-site` (ours), `figma-generate-design`, `figma-use` | Needs a style kit. Breakpoint variable modes. Profile: `profiles/website.json`. |
 | Read styles from a site, picture, Mobbin result, or Figma file | `figma-rip` (ours) | Asks before every read. Copies values only. Writes provenance. |
 | Point at a layer and fix it | `figma-here` (ours), `figma-use` | Needs a copy-link-to-selection link. Says back what it found first. |
 | Plan screens and paths before drawing | `figma-flow` (ours) | Plan only. Waits for approval. |
@@ -46,7 +47,7 @@ Always load `figma-use` before any `use_figma` call. Add the rows that match.
 
 If a skill in the table is not installed, say so and continue with `figma-use` rules only. Do not invent its rules.
 
-Available commands: `/figma-doctor`, `/figma-new`, `/figma-rip`, `/figma-deck`, `/figma-here`, `/figma-flow`, `/figma-design`, `/figma-prototype`, `/figma-animate`, `/figma-sync`, `/figma-handoff`, `/figma-audit`, `/figma-a11y`, `/figma-learn`.
+Available commands: `/figma-doctor`, `/figma-new`, `/figma-rip`, `/figma-deck`, `/figma-site`, `/figma-here`, `/figma-flow`, `/figma-design`, `/figma-prototype`, `/figma-animate`, `/figma-sync`, `/figma-handoff`, `/figma-audit`, `/figma-a11y`, `/figma-learn`.
 
 ## Step 2: Rules for every write
 

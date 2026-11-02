@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.8.0
+- `/figma-site`: responsive website page sets (Desktop, Tablet, Mobile) from a style kit.
+- `profiles/website.json` and `site-check.js` (text size, targets, contrast, overflow, section parity, style fidelity).
+- Breakpoint variable modes technique, tested in a real file (`references/breakpoint-modes.md`).
+- `rip-image.mjs --sample` (exact pixel colors) and `rip-to-style.mjs --set` and `--stand-in`.
+- Tested: a 3 frame home page. First check found accent text at 2.4 to 1 contrast and links under 24 px. Fixed. Second check clean for contrast.
+
 ## 0.7.0
 - Format profiles (`profiles/`), starting with `presentation.json`.
 - `/figma-new`: asks the format and the style first. Claude's default look is not a style.

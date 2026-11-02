@@ -9,7 +9,7 @@ import { existsSync, readdirSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 
 const args = process.argv.slice(2);
-const pos = args.filter((a, i) => !a.startsWith("--") && args[i - 1] !== "--source" && args[i - 1] !== "--trim-bottom");
+const pos = args.filter((a, i) => !a.startsWith("--") && !["--source", "--trim-bottom", "--sample"].includes(args[i - 1]));
 const [img, outFile] = pos;
 const si = args.indexOf("--source");
 const source = si >= 0 ? args[si + 1] : img;
@@ -40,7 +40,7 @@ const TW = 240;
 const th = H0 && W0 ? Math.max(1, Math.round((H0 / W0) * TW)) : 160;
 // --trim-bottom 0.09 cuts the bottom 9% first (for example a "curated by" bar on reference screenshots)
 const tb = args.indexOf("--trim-bottom");
-const trim = tb >= 0 ? Math.min(0.5, Math.max(0, parseFloat(args[tb + 1]) || 0)) : 0;
+const trim = tb >= 0 ? Math.min(0.8, Math.max(0, parseFloat(args[tb + 1]) || 0)) : 0;
 const thTrim = trim ? Math.max(1, Math.round(th * (1 - trim))) : th;
 const vf = (trim ? `crop=iw:ih*${1 - trim}:0:0,` : "") + `scale=${TW}:${thTrim}:flags=area`;
 const r = spawnSync(ff, ["-v", "error", "-i", path, "-vf", vf, "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], { maxBuffer: 1 << 26 });
@@ -83,5 +83,20 @@ const out = {
   needsLooking: ["font families (look at the picture, or read the live page)", "font sizes and weights", "corner radius", "spacing scale", "shadows", "motion"],
   notRead: ["text content", "images", "logos and icons", "font files", "everything a flat picture cannot show"],
 };
+// --sample "x,y;x,y" reads exact pixels at full size (use it to read a small accent, such as a button)
+const sa = args.indexOf("--sample");
+if (sa >= 0 && W0 && H0) {
+  const full = spawnSync(ff, ["-v", "error", "-i", path, "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], { maxBuffer: 1 << 28 });
+  out.samples = [];
+  for (const pt of String(args[sa + 1] || "").split(";").map((s) => s.trim()).filter(Boolean)) {
+    const [x, y] = pt.split(",").map((n) => parseInt(n, 10));
+    if (full.status === 0 && x >= 0 && y >= 0 && x < W0 && y < H0) {
+      // average a 5 by 5 block so a single noisy pixel does not mislead
+      let r = 0, g = 0, b = 0, n = 0;
+      for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) { const px = x + dx, py = y + dy; if (px < 0 || py < 0 || px >= W0 || py >= H0) continue; const o = (py * W0 + px) * 3; r += full.stdout[o]; g += full.stdout[o + 1]; b += full.stdout[o + 2]; n++; }
+      out.samples.push({ x, y, hex: hx({ r: r / n, g: g / n, b: b / n }) });
+    } else out.samples.push({ x, y, error: "outside the image or decode failed" });
+  }
+}
 writeFileSync(resolve(outFile), JSON.stringify(out, null, 2));
 console.log(JSON.stringify({ out: resolve(outFile), image: `${W0}x${H0}`, page: page.c, top: out.palette.slice(0, 10).map((p) => `${p.c} ${(p.share * 100).toFixed(1)}%`) }, null, 2));

@@ -127,7 +127,7 @@ test("each Figma script has its placeholder exactly once", () => {
     // scripts that need no input (they read the current page, or run in a browser)
     if (["check-flow.js", "rip-dom.js"].includes(basename(f))) { assert(found.length === 0, `${basename(f)} needs no input but has a placeholder`); continue; }
     // scripts with two inputs
-    if (basename(f) === "deck-check.js") { assert(found.length === 2 && found.includes("__PROFILE__") && found.includes("__STYLE__"), "deck-check.js needs __PROFILE__ and __STYLE__"); continue; }
+    if (["deck-check.js", "site-check.js"].includes(basename(f))) { assert(found.length === 2 && found.includes("__PROFILE__") && found.includes("__STYLE__"), `${basename(f)} needs __PROFILE__ and __STYLE__`); continue; }
     assert(found.length === 1, `${basename(f)}: expected one placeholder, found ${found.join(", ") || "none"}`);
     const count = s.split(found[0]).length - 1;
     assert(count >= 1, `${basename(f)}: placeholder missing`);
@@ -293,6 +293,17 @@ test("profile presentation.json is valid and has the numbers audits need", () =>
   assert(p.canvas.width === 1920 && p.canvas.height === 1080, "slide size");
   assert(p.type.absoluteFloor < p.type.labelMin && p.type.labelMin <= p.type.captionMin && p.type.captionMin <= p.type.bodyMin, "type minimums must be in order");
   assert(p.contrast.body >= 4.5, "body contrast must be at least 4.5");
+});
+test("profile website.json is valid and has the numbers audits need", () => {
+  const p = JSON.parse(read("profiles/website.json"));
+  for (const k of ["canvas", "type", "targets", "contrast", "sections", "responsive", "notObservable"]) assert(p[k], "missing " + k);
+  assert(p.canvas.frames.length === 3 && p.canvas.frames.map((f) => f.width).join() === "1440,768,390", "breakpoint widths");
+  assert(p.targets.pointer === 24 && p.targets.touch >= 44, "target sizes");
+  assert(p.contrast.body >= 4.5, "body contrast must be at least 4.5");
+  assert(p.responsive.collection === "Breakpoint", "breakpoint collection name");
+});
+test("figma-site skill, command, and reference exist", () => {
+  for (const f of ["skills/figma-site/SKILL.md", "commands/figma-site.md", "skills/figma-site/references/breakpoint-modes.md", "skills/figma-site/scripts/site-check.js"]) assert(existsSync(join(ROOT, f)), "missing " + f);
 });
 test("profiles README lists every profile file", () => {
   const files = readdirSync(join(ROOT, "profiles")).filter((f) => f.endsWith(".json"));

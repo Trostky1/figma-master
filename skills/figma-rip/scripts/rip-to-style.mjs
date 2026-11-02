@@ -74,6 +74,24 @@ texts.forEach((t) => seeAccent(t.c, t.n));
 varColors.filter((v) => /accent|brand|primary|gold|patina|vermilion|highlight/i.test(v.name)).forEach((v) => seeAccent(v.hex, 2));
 const accents = [...accentSeen.entries()].sort((a, b) => b[1] - a[1]).slice(0, 4).map(([hx, w]) => ({ hex: hx, weight: w, source: nameFor(hx) }));
 
+// --set "bg/alt=#fdfdfd;accent/1=#fe6901": fix a role by hand after review. Marked "set by hand" in DESIGN.md.
+const manual = {};
+{
+  const si2 = args.indexOf("--set");
+  if (si2 >= 0) for (const part of String(args[si2 + 1] || "").split(";").map((s) => s.trim()).filter(Boolean)) {
+    const [k, v] = part.split("=");
+    if (/^#[0-9a-f]{6}$/i.test(v || "")) manual[k.trim()] = v.toLowerCase();
+  }
+}
+const setBy = (role, current) => manual[role] || current;
+const applyManual = () => {
+  if (manual["bg/alt"]) alt2 = manual["bg/alt"];
+  accents.forEach((a, i) => { if (manual[`accent/${i + 1}`]) { a.hex = manual[`accent/${i + 1}`]; a.source = "set by hand"; } });
+  for (const [k, v] of Object.entries(manual)) { const m = /^accent\/(\d+)$/.exec(k); if (m && +m[1] > accents.length) accents.push({ hex: v, weight: 0, source: "set by hand" }); }
+};
+let alt2 = alt;
+applyManual();
+
 // ---------------- type ----------------
 const tb = rip.typeByTag || {};
 const stripVariant = (f) => (f || "").replace(/\s+(Hero|Display|Variable|VF|Text)$/i, "");
@@ -94,6 +112,12 @@ if (fi >= 0) {
     if (!["display", "headline", "title", "body", "small", "mono"].includes(k) || !family) continue;
     type[k] = { family, figmaFamilyGuess: family, size: +size, weight: +weight, lineHeight: k === "display" ? 1.05 : k === "body" ? 1.5 : 1.3, letterSpacing: "normal", manual: true };
   }
+}
+// --stand-in "Inter Tight=Geist": the family is not in Figma. Use a stand in and say so (kept in DESIGN.md).
+const sti = args.indexOf("--stand-in");
+if (sti >= 0) {
+  const map = Object.fromEntries(String(args[sti + 1] || "").split(";").map((s) => s.split("=").map((x) => x.trim())).filter((p) => p.length === 2 && p[0] && p[1]));
+  for (const v of Object.values(type)) if (v && map[v.family]) { v.figmaFamilyGuess = map[v.family]; v.standIn = true; }
 }
 const families = { display: type.display && type.display.family, body: type.body && type.body.family, mono: type.mono && type.mono.family };
 
@@ -126,7 +150,7 @@ const cards = (rip.cards || []).map((c) => ({ bg: c.bg, radius: c.radius, border
 // ---------------- write files ----------------
 const dim = (n) => `${n}px`;
 const tokens = { color: { bg: { page: { $type: "color", $value: page } }, text: {}, border: {}, accent: {} }, font: { family: {}, size: {}, weight: {} }, space: {}, radius: {} };
-if (alt) tokens.color.bg.alt = { $type: "color", $value: alt };
+if (alt2) tokens.color.bg.alt = { $type: "color", $value: alt2 };
 if (inverse) tokens.color.bg.inverse = { $type: "color", $value: inverse };
 if (strong) tokens.color.text.strong = { $type: "color", $value: strong.c };
 if (body) tokens.color.text.body = { $type: "color", $value: body.c };
@@ -153,7 +177,7 @@ md.push(`This file describes the SYSTEM (colors, type, spacing, shapes, motion).
 md.push(`## Color\n`);
 md.push(row("Role", "Hex", "Source variable or evidence"), row("---", "---", "---"));
 md.push(row("bg/page", page, `${sourceName(page)} covers ${Math.round(bgs[0].areaShare * 100)}% of painted area`));
-if (alt) md.push(row("bg/alt", alt, sourceName(alt)));
+if (alt2) md.push(row("bg/alt", alt2, manual["bg/alt"] ? "set by hand" : sourceName(alt2)));
 if (inverse) md.push(row("bg/inverse", inverse, `${sourceName(inverse)} dark surface`));
 if (strong) md.push(row("text/strong", strong.c, `${sourceName(strong.c)} contrast ${strong.cr.toFixed(1)}:1`));
 if (body) md.push(row("text/body", body.c, `most used text color, contrast ${body.cr.toFixed(1)}:1`));
@@ -164,7 +188,7 @@ accents.forEach((a, i) => md.push(row(`accent/${i + 1}`, a.hex, `${a.source || "
 md.push(`\nAccents are colors with real saturation. Use them for a few marks, not for large areas, unless the source does.\n`);
 md.push(`## Type\n`);
 md.push(row("Role", "Family", "Size", "Weight", "Line height", "Note"), row("---", "---", "---", "---", "---", "---"));
-for (const [k, v] of Object.entries(type)) if (v) md.push(row(k, v.family + (v.family !== v.figmaFamilyGuess ? ` (Figma: ${v.figmaFamilyGuess})` : ""), v.size + "px", v.weight, v.lineHeight, v.manual ? "chosen by looking at the image, not measured" : k === "display" ? "thin or heavy display weights carry the look" : ""));
+for (const [k, v] of Object.entries(type)) if (v) md.push(row(k, v.family + (v.family !== v.figmaFamilyGuess ? ` (Figma: ${v.figmaFamilyGuess})` : ""), v.size + "px", v.weight, v.lineHeight, v.standIn ? "STAND IN: the real family is not in Figma" + (v.manual ? "; chosen by looking, not measured" : "") : v.manual ? "chosen by looking at the image, not measured" : k === "display" ? "thin or heavy display weights carry the look" : ""));
 md.push(`\nCheck every family exists in Figma with \`listAvailableFontsAsync()\`. A missing family needs a stand in, and you must say so.\n`);
 md.push(`## Space, shape, depth, motion\n`);
 md.push(`- Space scale (px): ${space.join(", ")}${spaceVars.length >= 4 ? " (from the site's own variables)" : " (standard scale; observed values: " + observedSpace.slice(0, 14).join(", ") + ")"}`);
@@ -185,6 +209,6 @@ writeFileSync(join(outDir, "tokens.json"), JSON.stringify(tokens, null, 2));
 writeFileSync(join(outDir, "tokens.css"), css);
 writeFileSync(join(outDir, "DESIGN.md"), md.join("\n"));
 writeFileSync(join(outDir, "components.json"), JSON.stringify({ buttons: btn, cards }, null, 2));
-writeFileSync(join(outDir, "evidence.json"), JSON.stringify({ roles: { page, alt, inverse, strong: strong && strong.c, body: body && body.c, muted: muted && muted.c, onInverse: onInverse && onInverse.c, line: lineC, accents }, type, families, space, observedSpace, radius, shadows, durations, easings, sourceVariables: varsByName }, null, 2));
+writeFileSync(join(outDir, "evidence.json"), JSON.stringify({ roles: { page, alt: alt2, inverse, strong: strong && strong.c, body: body && body.c, muted: muted && muted.c, onInverse: onInverse && onInverse.c, line: lineC, accents }, type, families, space, observedSpace, radius, shadows, durations, easings, sourceVariables: varsByName }, null, 2));
 writeFileSync(join(outDir, "provenance.md"), provenance);
 console.log(JSON.stringify({ outDir, files: ["tokens.json", "tokens.css", "DESIGN.md", "components.json", "evidence.json", "provenance.md"], page, accents: accents.map((a) => a.hex), families }, null, 2));

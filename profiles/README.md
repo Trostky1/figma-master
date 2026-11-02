@@ -5,7 +5,7 @@ One file per format. A profile holds the numbers and rules that change with what
 | Format | Profile | Status |
 |---|---|---|
 | Presentation (Figma Slides) | `presentation.json` | Built and tested |
-| Website (desktop and responsive) | | Next |
+| Website (desktop and responsive) | `website.json` | Built and tested |
 | Mobile app | | Planned |
 | Mobile website | | Planned |
 | Poster (print) | | Planned |
