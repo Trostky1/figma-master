@@ -83,7 +83,23 @@ Run the script twice: once normal, once with `reduced: true` on a copy of the sc
 
 ## Motion to code
 
-When the user wants it in code, call `get_motion_context(nodeId, recursive: true)`. It returns motion.dev snippets and groups of layers that share a timeline. Check what it gives you: it marks every track as `repeat: Infinity` and uses the timeline length (2 s by default) as one loop. For one time entrances, remove the repeat and trim the duration to the real end. Say so in the handoff.
+When the user wants it in code, use the bridge. It writes plain CSS (no library) that plays once:
+
+1. Run `scripts/read-motion.js` through `use_figma` (replace `__ROOT_ID__` with the screen id). It reads every animated layer.
+2. Save the result as JSON in a scratch folder.
+3. Run `node skills/figma-motion/scripts/motion-to-css.mjs <motion.json>` (add `--loop` to repeat).
+4. Give the user the CSS and the class list at the top. Each class goes on the matching element. The stagger is built in through `animation-delay`.
+
+What the bridge does:
+- Uses Figma's own easing curves (EASE_OUT is `cubic-bezier(0, 0, 0.58, 1)`, as Figma reports it).
+- Starts each layer at its own first keyframe (`animation-delay`) and lasts until its last one.
+- Writes a reduced motion block: entering layers fade in over 0.15 s, other motion stops.
+- Flips rotation (Figma counter clockwise is positive, CSS is the opposite).
+- Warns when a layer's tracks use different keyframe times (values between are interpolated).
+
+What it does not do: fills, strokes, effects, size, corner radius, path trim, and spring physics (springs are approximated with a curve and it warns). Those tracks are listed in a comment at the top of the CSS.
+
+For a motion.dev snippet instead, `get_motion_context(nodeId, recursive: true)` returns one. It loops forever and uses the whole timeline (2 s by default) as one cycle. For one time entrances, remove the repeat and trim the duration.
 
 ## Report format
 

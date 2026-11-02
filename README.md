@@ -4,7 +4,7 @@ One entry point for Claude Code and Figma.
 
 figma-master does not replace Figma's own skills. It picks the right ones for the job, adds safety and checking rules, and remembers project settings. Version 0.1 is the foundation: the router skill, a health check, and tested reference notes.
 
-## What is in v0.4
+## What is in v0.5
 
 | Piece | What it does |
 |---|---|
@@ -14,6 +14,8 @@ figma-master does not replace Figma's own skills. It picks the right ones for th
 | `/figma-design` | Builds a screen with the project's library and variables. Verifies, then audits. Wraps Figma's own design skills. |
 | `/figma-prototype` | Makes screens clickable from an approved interaction map. Name based, all or nothing apply script and a flow checker (broken links, unreachable screens, dead ends, Smart Animate name matches). |
 | `/figma-animate` | Adds motion inside a screen from 9 tested recipes (fade, rise, slide, pop, press, pulse, shake, draw, stagger). Calm, standard, or expressive dial. Reduced motion option. Checks the result as a contact sheet of video frames (needs ffmpeg). Hands motion to code. |
+| `/figma-sync` | Keeps design tokens in step between code (CSS or DTCG JSON) and Figma variables. Light and dark modes, aliases, scopes. Dry run first. Never deletes. Also exports Figma back to CSS. Tested round trip with 0 differences. |
+| `/figma-handoff` | Read-only developer handoff document for one frame: layout, tokens used, text, components, interactions, motion as plain CSS (plays once, reduced motion included), assets, and what Figma cannot show. |
 | `/figma-audit` | Read-only design review. Scores 0 to 100 by severity. Tested scan script (`skills/figma-audit/scripts/scan.js`). |
 | `/figma-a11y` | Read-only WCAG 2.2 AA check: contrast, text size, targets, states, motion. Lists what Figma cannot show. |
 | `references/capabilities.md` | What was tested to work, with dates. |
@@ -52,7 +54,7 @@ Add `--write` to also run a write test in a new scratch file. It asks first.
 | 0.2 (done) | `/figma-design`, `/figma-flow`, `/figma-audit`, `/figma-a11y` |
 | 0.3 (done) | `/figma-prototype` for flows, triggers, variables, and logic |
 | 0.4 (done) | Motion recipes, `/figma-animate`, and the frame check loop |
-| 0.5 | `/figma-sync`, code to motion bridge, `/figma-handoff` |
+| 0.5 (done) | `/figma-sync`, code to motion bridge, `/figma-handoff` |
 | 0.6 | `/figma-learn`, evals, publish |
 
 ## Status

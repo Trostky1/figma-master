@@ -21,6 +21,12 @@ Tested 2026-11-02 on a Full seat, student tier, with the official remote Figma M
 | Failed script leaves the file unchanged | Observed | A script that throws is rolled back, including nodes it made earlier in the same call. |
 | `typeof node.missingProp` | Throws | In the sandbox, reading an unknown property on a node throws. Wrap probes in try/catch. |
 | Action `SWAP`, `CHANGE_TO`, `SCROLL_TO`, `ON_KEY_DOWN` | Not tested | |
+| Variable collection with Light and Dark, 13 tokens, alias | Works | Created, re-read, matched. Re-running the sync changed nothing (13 unchanged). |
+| Scopes `FRAME_FILL`, `SHAPE_FILL`, `TEXT_FILL`, `STROKE_COLOR`, `GAP`, `CORNER_RADIUS`, `FONT_SIZE`, `FONT_WEIGHT`, `FONT_FAMILY` | Accepted | Used by `sync-tokens.js`. |
+| `setBoundVariable('cornerRadius', v)` | Works | Binds the four per-corner fields. The reader checks `topLeftRadius`. |
+| Code to Figma to code token round trip | Works | CSS, spec, Figma, export, CSS, spec: 0 differences on 13 tokens. |
+| Figma keyframes expose the real curve | Yes | `easingFunctionCubicBezier` comes with EASE_OUT (0, 0, 0.58, 1) and EASE_IN_AND_OUT (0.42, 0, 0.58, 1). |
+| Library variables (team library) | Not tested | The exporter skips aliases to library variables and lists them. |
 | Motion flag | On for the tested account | 7 styles: TextStagger, Position, Scale, Rotation, Size, Opacity, Path. |
 | Manual keyframes | Works | Default timeline 2 seconds. |
 | Animation styles apply and remove | Works | |

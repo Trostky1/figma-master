@@ -27,8 +27,10 @@ Always load `figma-use` before any `use_figma` call. Add the rows that match.
 | Build components, variants, tokens | `figma-use`, `figma-generate-library` | Variables before components. |
 | Prototype links, Smart Animate, flows | `figma-prototype` (ours), `figma-use` | Needs an approved interaction map. Reference: `references/prototype.md`. |
 | Motion inside a screen (fade, rise, stagger, press) | `figma-motion` (ours), `figma-use`, `figma-use-motion` | Recipes, intensity dial, frame check. Stops if the motion flag is off. Notes: `references/motion.md`. |
-| Motion to code (motion.dev, CSS) | `get_motion_context`, `figma-implement-motion` | |
-| Figma frame to code | `figma-design-to-code` | |
+| Motion to code (CSS) | `figma-motion` (ours) bridge scripts. Or `get_motion_context` for motion.dev. | Plays once. Reduced motion included. |
+| Tokens between code and Figma variables | `figma-sync` (ours), `figma-use` | Dry run first. Never deletes. |
+| Developer handoff document | `figma-handoff` (ours), `figma-use` | Read-only on Figma. |
+| Figma frame to code | `figma-design-to-code` | Use the handoff document as the spec beside it. |
 | Code Connect | `figma-code-connect` | |
 | FigJam or Slides | `figma-use-figjam` or `figma-use-slides` | |
 | Create a new file | `figma-create-new-file` | Needs `planKey` from `whoami`. |
@@ -36,9 +38,9 @@ Always load `figma-use` before any `use_figma` call. Add the rows that match.
 
 If a skill in the table is not installed, say so and continue with `figma-use` rules only. Do not invent its rules.
 
-Available commands: `/figma-doctor`, `/figma-flow`, `/figma-design`, `/figma-prototype`, `/figma-animate`, `/figma-audit`, `/figma-a11y`.
+Available commands: `/figma-doctor`, `/figma-flow`, `/figma-design`, `/figma-prototype`, `/figma-animate`, `/figma-sync`, `/figma-handoff`, `/figma-audit`, `/figma-a11y`.
 
-Planned for later versions (not available yet): `/figma-sync`, `/figma-handoff`, `/figma-learn`.
+Planned for later versions (not available yet): `/figma-learn`.
 
 ## Step 2: Rules for every write
 

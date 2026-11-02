@@ -24,3 +24,8 @@ Each item was met in real use. Add new ones only with the user's yes.
 | 18 | Timeline default is 2 s. Short animations then play with a long still tail in a loop. | Check `timelines`. The motion script only extends it. Shorten by hand only if the user asks. |
 | 19 | Exported motion code loops forever (`repeat: Infinity`). | Remove the repeat for one time entrances. |
 | 20 | Two recipes on one layer that write the same field replace each other. | Use different recipes per layer, or give the later one a different field. |
+| 21 | `use_figma` code is limited to 50,000 characters. A big token spec does not fit. | `tokens-to-spec.mjs --chunk 50` makes parts. Aliases come in the last part. |
+| 22 | `setBoundVariable('cornerRadius', v)` fills the four per-corner fields. The single `cornerRadius` key stays empty. | Read `topLeftRadius` when you check a binding. |
+| 23 | CSS names with dashes inside a word (`--color-brand-primary`) become three Figma segments. | Accept it. The rule is dash to slash both ways. Do not mix naming styles. |
+| 24 | Figma's exported motion code loops forever and runs the whole 2 s timeline as one cycle. | Use `motion-to-css.mjs`. It plays once and uses each layer's real span. |
+| 25 | Shadows, gradients, easing curves, and `calc()` in CSS tokens have no Figma variable type. | Listed in `skipped`. Tell the user. Do not drop them silently. |
