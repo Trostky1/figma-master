@@ -20,7 +20,10 @@ Always load `figma-use` before any `use_figma` call. Add the rows that match.
 
 | Task | Load these skills | Notes |
 |---|---|---|
-| Build or edit a screen, modal, panel | `figma-use`, `figma-generate-design` | Find library parts first. No hardcoded colors if variables exist. |
+| Plan screens and paths before drawing | `figma-flow` (ours) | Plan only. Waits for approval. |
+| Build or edit a screen, modal, panel | `figma-design` (ours), which loads `figma-use` and `figma-generate-design` | Find library parts first. No hardcoded colors if variables exist. |
+| Review design quality (read-only) | `figma-audit` (ours), `figma-use` | Scores 0 to 100. Never edits. |
+| Accessibility check (read-only) | `figma-a11y` (ours), `figma-use` | WCAG 2.2 AA. Lists what Figma cannot show. |
 | Build components, variants, tokens | `figma-use`, `figma-generate-library` | Variables before components. |
 | Prototype links, Smart Animate, flows | `figma-use` | See `references/prototype.md`. |
 | Keyframes, easing, timelines | `figma-use`, `figma-use-motion` | See `references/motion.md`. Stop if the motion flag is off. |
@@ -33,7 +36,9 @@ Always load `figma-use` before any `use_figma` call. Add the rows that match.
 
 If a skill in the table is not installed, say so and continue with `figma-use` rules only. Do not invent its rules.
 
-Planned for later versions (not available yet): `/figma-design`, `/figma-prototype`, `/figma-animate`, `/figma-audit`, `/figma-a11y`, `/figma-sync`, `/figma-handoff`, `/figma-learn`.
+Available commands: `/figma-doctor`, `/figma-flow`, `/figma-design`, `/figma-audit`, `/figma-a11y`.
+
+Planned for later versions (not available yet): `/figma-prototype`, `/figma-animate`, `/figma-sync`, `/figma-handoff`, `/figma-learn`.
 
 ## Step 2: Rules for every write
 
