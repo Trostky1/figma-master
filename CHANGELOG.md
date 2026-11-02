@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.9.0
+- `/figma-app`, `/figma-mobile-site`, `/figma-poster` with profiles (`mobile-app.json`, `mobile-site.json`, `poster.json`). Written, not tested in Figma.
+- `/figma-deslop` with `slop-scan.js`: finds AI slop in design and copy, swaps each sign for a choice from the style kit.
+- `/figma-polish`: final quality pass checklist.
+- `/figma-fix`: audit and fix in one command, with `apply-safe-fixes.js`.
+- README quick start and command cheat sheet.
+
 ## 0.8.0
 - `/figma-site`: responsive website page sets (Desktop, Tablet, Mobile) from a style kit.
 - `profiles/website.json` and `site-check.js` (text size, targets, contrast, overflow, section parity, style fidelity).

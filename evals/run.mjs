@@ -116,7 +116,7 @@ test("Figma scripts are read-only unless named apply, sync, or motion", () => {
   for (const f of scriptFiles.filter((x) => x.endsWith(".js"))) {
     const name = basename(f);
     const writes = /\b(setReactionsAsync|applyManualKeyframeTrack|createVariable\(|setValueForMode|setBoundVariable|\.fills\s*=|appendChild|createFrame|createText)\b/.test(readFileSync(f, "utf8"));
-    const allowed = /^(apply-reactions|apply-motion|sync-tokens)\.js$/.test(name);
+    const allowed = /^(apply-reactions|apply-motion|sync-tokens|apply-safe-fixes)\.js$/.test(name);
     assert(!(writes && !allowed), `${name} writes to Figma but is not an apply script`);
   }
 });

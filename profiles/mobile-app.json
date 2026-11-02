@@ -1,0 +1,26 @@
+{
+  "format": "mobile-app",
+  "name": "Mobile app (iOS and Android)",
+  "status": "written, not tested in Figma",
+  "numbersAre": "working defaults. Apple and Material guidance changes. Check the current guidance before you ship.",
+  "canvas": {
+    "frames": [
+      { "name": "Mobile", "width": 393, "height": 852, "mode": "Mobile", "note": "iPhone 15 and 16 class" },
+      { "name": "Mobile", "width": 412, "height": 915, "mode": "Mobile", "note": "Android class" }
+    ],
+    "naming": "<Screen> / Mobile 393",
+    "safeArea": { "top": 59, "bottom": 34, "note": "Keep content and tap targets out of the status bar and home indicator zones." }
+  },
+  "type": { "bodyMin": 16, "captionMin": 13, "labelMin": 12, "absoluteFloor": 11, "maxFamilies": 2, "lineLength": { "min": 25, "max": 60 } },
+  "targets": { "pointer": 24, "touch": 44, "touchFrames": ["Mobile"], "note": "iOS asks 44. Material asks 48. Use 48 when the app ships on Android." },
+  "contrast": { "body": 4.5, "large": 3, "largeTextPx": 24 },
+  "sections": { "required": [] },
+  "layout": { "primaryCtaWithinPx": 852, "thumbZone": "Primary actions in the lower half. Tab bar at the bottom.", "sameSectionOrderAcrossBreakpoints": true },
+  "navigation": { "tabBarMax": 5, "backAlwaysAvailable": true },
+  "states": { "everyScreenNeeds": ["loading", "empty", "error", "offline"] },
+  "responsive": { "collection": "Breakpoint" },
+  "motion": { "transition": "250 to 350 ms", "press": "100 ms", "reducedMotion": "fade only" },
+  "export": { "built": ["Figma Design frames"], "later": ["Expo or SwiftUI handoff"] },
+  "skills": ["figma-use", "figma-generate-design", "figma-prototype", "figma-site", "figma-flow"],
+  "notObservable": ["Real device performance", "Gestures and haptics", "Dynamic Type and font scaling", "Dark mode on device", "Keyboard overlap"]
+}

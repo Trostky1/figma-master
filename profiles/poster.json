@@ -1,0 +1,26 @@
+{
+  "format": "poster",
+  "name": "Poster (print)",
+  "status": "written, not tested in Figma",
+  "numbersAre": "working defaults. Ask the print shop for their size, bleed, and file rules first.",
+  "canvas": {
+    "sizes": [
+      { "name": "Letter", "inches": [8.5, 11], "px96": [816, 1056] },
+      { "name": "Tabloid", "inches": [11, 17], "px96": [1056, 1632] },
+      { "name": "18 x 24", "inches": [18, 24], "px96": [1728, 2304] },
+      { "name": "24 x 36", "inches": [24, 36], "px96": [2304, 3456] },
+      { "name": "A2", "mm": [420, 594] }
+    ],
+    "unit": "Design at 96 px per inch in Figma. Export at a scale that gives 300 dpi at final size.",
+    "bleedIn": 0.125,
+    "safeMarginIn": 0.5
+  },
+  "type": { "viewing": { "arm": "Body 12 pt or more", "across room": "Headline readable from 2 m: 72 pt or more" }, "maxFamilies": 2 },
+  "hierarchy": { "levels": 3, "rule": "One focal point. The eye finds the title first, the proof second, the detail last." },
+  "contrast": { "body": 4.5, "large": 3 },
+  "print": { "colorMode": "Figma is RGB only. Export PDF and convert to CMYK in the print tool. Bright oranges and greens shift.", "blackText": "Use rich black only for large areas. Small text in 100 K.", "minLinePt": 0.5 },
+  "layout": { "grid": "Pick a grid. Align to it. Leave empty space on purpose." },
+  "export": { "built": ["PNG", "PDF from Figma"], "later": ["CMYK PDF/X in a print tool"] },
+  "skills": ["figma-use", "figma-generate-design", "figma-rip", "figma-audit"],
+  "notObservable": ["CMYK color shift", "Paper stock and finish", "Trim accuracy", "How it looks from a distance (print a small copy and step back)"]
+}

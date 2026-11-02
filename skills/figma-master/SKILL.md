@@ -27,6 +27,12 @@ Always load `figma-use` before any `use_figma` call. Add the rows that match.
 | Start any new design | `figma-new` (ours) | Asks the format and the style first. Nothing is drawn before both are settled. |
 | Slides deck in a chosen style | `figma-deck` (ours), `figma-use-slides`, `figma-use` | Needs a style kit. Profile: `profiles/presentation.json`. |
 | Responsive website (Desktop, Tablet, Mobile) in a chosen style | `figma-site` (ours), `figma-generate-design`, `figma-use` | Needs a style kit. Breakpoint variable modes. Profile: `profiles/website.json`. |
+| Mobile app screens | `figma-app` (ours), `figma-flow`, `figma-prototype` | Profile: `profiles/mobile-app.json`. Not yet tested. |
+| Phone first website | `figma-mobile-site` (ours), `figma-site` | Profile: `profiles/mobile-site.json`. Not yet tested. |
+| Print poster | `figma-poster` (ours) | Profile: `profiles/poster.json`. Not yet tested. |
+| Audit and fix in one go | `figma-fix` (ours) | Safe fixes first, asks before look changes. |
+| Remove AI slop | `figma-deslop` (ours) | Needs a style kit to judge intent. |
+| Final quality pass | `figma-polish` (ours) | Stays inside the kit. |
 | Read styles from a site, picture, Mobbin result, or Figma file | `figma-rip` (ours) | Asks before every read. Copies values only. Writes provenance. |
 | Point at a layer and fix it | `figma-here` (ours), `figma-use` | Needs a copy-link-to-selection link. Says back what it found first. |
 | Plan screens and paths before drawing | `figma-flow` (ours) | Plan only. Waits for approval. |
@@ -47,7 +53,7 @@ Always load `figma-use` before any `use_figma` call. Add the rows that match.
 
 If a skill in the table is not installed, say so and continue with `figma-use` rules only. Do not invent its rules.
 
-Available commands: `/figma-doctor`, `/figma-new`, `/figma-rip`, `/figma-deck`, `/figma-site`, `/figma-here`, `/figma-flow`, `/figma-design`, `/figma-prototype`, `/figma-animate`, `/figma-sync`, `/figma-handoff`, `/figma-audit`, `/figma-a11y`, `/figma-learn`.
+Available commands: `/figma-doctor`, `/figma-new`, `/figma-rip`, `/figma-deck`, `/figma-site`, `/figma-app`, `/figma-mobile-site`, `/figma-poster`, `/figma-fix`, `/figma-deslop`, `/figma-polish`, `/figma-here`, `/figma-flow`, `/figma-design`, `/figma-prototype`, `/figma-animate`, `/figma-sync`, `/figma-handoff`, `/figma-audit`, `/figma-a11y`, `/figma-learn`.
 
 ## Step 2: Rules for every write
 

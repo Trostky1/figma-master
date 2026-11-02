@@ -6,9 +6,9 @@ One file per format. A profile holds the numbers and rules that change with what
 |---|---|---|
 | Presentation (Figma Slides) | `presentation.json` | Built and tested |
 | Website (desktop and responsive) | `website.json` | Built and tested |
-| Mobile app | | Planned |
-| Mobile website | | Planned |
-| Poster (print) | | Planned |
+| Mobile app | `mobile-app.json` | Written, not tested |
+| Mobile website | `mobile-site.json` | Written, not tested |
+| Poster (print) | `poster.json` | Written, not tested |
 
 ## Shape of a profile
 

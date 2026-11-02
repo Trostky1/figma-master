@@ -4,7 +4,86 @@ One entry point for Claude Code and Figma.
 
 figma-master does not replace Figma's own skills. It picks the right ones for the job, adds safety and checking rules, and remembers project settings. Version 0.1 is the foundation: the router skill, a health check, and tested reference notes.
 
-## What is in v0.8
+## Quick start
+
+```text
+/plugin marketplace add Trostky1/figma-master
+/plugin install figma-master@figma-master
+/figma-doctor <your figma file link>
+```
+
+Then pick a path:
+
+1. **Start with a style.** Run `/figma-rip <link or image>` to read a look into a style kit. Or let `/figma-new` ask you.
+2. **Build.** Use the command for your format (table below).
+3. **Clean up.** Run `/figma-fix`, then `/figma-deslop`, then `/figma-polish`.
+4. **Hand off.** `/figma-handoff` for code notes. `/figma-sync` for tokens.
+
+Rules that always hold: it asks before it reads a site, asks before it writes in bulk, and never copies text, images, logos, or font files from a reference. Only values.
+
+## Command cheat sheet
+
+**Start and style**
+
+| Command | Use it to | Example |
+|---|---|---|
+| `/figma-doctor` | Check tools, login, seat, skills | `/figma-doctor <file link>` |
+| `/figma-new` | Start a design. Asks format and style first | `/figma-new a landing page for a coffee brand` |
+| `/figma-rip` | Read a style from a site, image, Mobbin screen, or Figma file | `/figma-rip https://example.com` |
+| `/figma-flow` | Plan screens, states, paths. Plans only | `/figma-flow signup and onboarding` |
+
+**Build by format**
+
+| Format | Command | Example |
+|---|---|---|
+| Presentation (Figma Slides) | `/figma-deck` | `/figma-deck 8 slide pitch, style kit "warm"` |
+| Website (Desktop, Tablet, Mobile) | `/figma-site` | `/figma-site home page, style kit "bold"` |
+| Mobile app (iOS, Android) | `/figma-app` | `/figma-app habit tracker, 6 screens` |
+| Mobile website (phone first) | `/figma-mobile-site` | `/figma-mobile-site restaurant site` |
+| Poster (print) | `/figma-poster` | `/figma-poster 18x24 event poster` |
+| One screen with a library | `/figma-design` | `/figma-design settings screen` |
+
+**Interact and animate**
+
+| Command | Use it to | Example |
+|---|---|---|
+| `/figma-prototype` | Make screens clickable from an approved map | `/figma-prototype <flow link>` |
+| `/figma-animate` | Add motion from 9 recipes (calm, standard, expressive) | `/figma-animate hero entrance, calm` |
+| `/figma-app`, `/figma-mobile-site`, `/figma-poster` | Format branches for mobile apps, phone first sites, and print posters. Profiles in `profiles/`. Written, not yet tested in Figma. |
+| `/figma-fix`, `/figma-deslop`, `/figma-polish` | Audit and fix in one command, AI slop removal (design and copy), and a final quality pass. |
+| `/figma-here` | Point at a layer with "Copy link to selection", then change only that | `/figma-here <link> make this button bigger` |
+
+**Quality**
+
+| Command | Use it to | Changes the file? |
+|---|---|---|
+| `/figma-audit` | Score a frame 0 to 100 by severity | No |
+| `/figma-a11y` | WCAG 2.2 AA check | No |
+| `/figma-fix` | Audit and fix the safe findings in one go. Asks before look changes | Yes, safe fixes only |
+| `/figma-deslop` | Remove AI slop: default gradients, Inter everywhere, template cards, filler copy | Yes, after your yes |
+| `/figma-polish` | Final pass: alignment, spacing, hierarchy, states, naming | Yes, after your yes |
+
+**Code and memory**
+
+| Command | Use it to | Example |
+|---|---|---|
+| `/figma-sync` | Keep tokens in step between code and Figma variables. Dry run first | `/figma-sync tokens.css` |
+| `/figma-handoff` | Read-only developer notes for one frame | `/figma-handoff <frame link>` |
+| `/figma-learn` | Record a new Figma gotcha. Writes only after your yes | `/figma-learn text style lost on instance` |
+
+## How to point at a layer
+
+In Figma, right click the layer, then **Copy/Paste as**, then **Copy link to selection**. Paste the link with your request. The plugin reads that exact node, tells you what it found, then changes only that.
+
+## Status by format
+
+| Format | Status |
+|---|---|
+| Presentation, Website | Built and tested in Figma |
+| Mobile app, Mobile website, Poster | Written, not yet tested in Figma. Expect rough edges and report them with `/figma-learn` |
+| `/figma-fix`, `/figma-deslop`, `/figma-polish` | Written, scripts not yet run in Figma. Run on a copy first |
+
+## What is in v0.9
 
 | Piece | What it does |
 |---|---|
@@ -86,7 +165,8 @@ Add `--write` to also run a write test in a new scratch file. It asks first.
 | 0.5 (done) | `/figma-sync`, code to motion bridge, `/figma-handoff` |
 | 0.7 (done) | Format profiles, presentation branch (`/figma-new`, `/figma-deck`), style reading (`/figma-rip`), pointing by link (`/figma-here`) |
 | 0.8 (done) | Website branch (`/figma-site`, `site-check.js`, Breakpoint modes) |
-| Next | Mobile app, mobile site, poster. Comment pins and live selection for `/figma-here`. |
+| 0.9 (done, untested) | Mobile app, mobile site, poster branches. `/figma-fix`, `/figma-deslop`, `/figma-polish` |
+| Next | Test the 0.9 pieces in Figma. Comment pins and live selection for `/figma-here`. |
 | 0.6 (done) | `/figma-learn`, offline evals, conflict rulings, publish prep |
 | Later | Untested actions (swap, change-to, scroll-to, key press), text stagger and color motion recipes, team library variables, a real run of every slash command |
 

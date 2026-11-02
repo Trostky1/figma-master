@@ -1,0 +1,25 @@
+{
+  "format": "mobile-site",
+  "name": "Mobile website (phone first)",
+  "status": "written, not tested in Figma",
+  "numbersAre": "working defaults.",
+  "canvas": {
+    "frames": [
+      { "name": "Mobile", "width": 390, "mode": "Mobile" },
+      { "name": "Tablet", "width": 768, "mode": "Tablet" }
+    ],
+    "naming": "<Page> / Mobile 390",
+    "structure": "Design Mobile first. Add Tablet after. Desktop is optional (use website.json for the full set)."
+  },
+  "type": { "bodyMin": 16, "captionMin": 13, "labelMin": 12, "absoluteFloor": 11, "maxFamilies": 3, "lineLength": { "min": 25, "max": 60 } },
+  "targets": { "pointer": 24, "touch": 44, "touchFrames": ["Tablet", "Mobile"] },
+  "contrast": { "body": 4.5, "large": 3, "largeTextPx": 24 },
+  "sections": { "required": ["nav", "hero", "footer"] },
+  "layout": { "primaryCtaWithinPx": 700, "horizontalOverflow": false, "sameSectionOrderAcrossBreakpoints": true, "navPattern": "Menu button opens a full screen or drawer menu. Sticky nav stays slim." },
+  "performance": { "note": "Large images and many fonts hurt phones. Two font families, few weights." },
+  "responsive": { "collection": "Breakpoint" },
+  "motion": { "hover": "none (touch)", "entrance": "200 to 400 ms", "reducedMotion": "fade only" },
+  "export": { "built": ["Figma Design frames"], "later": ["Hugo theme", "Next.js"] },
+  "skills": ["figma-use", "figma-generate-design", "figma-site", "figma-rip"],
+  "notObservable": ["Real page speed", "Browser toolbar height changes", "Orientation change", "Keyboard overlap", "Slow network"]
+}
