@@ -5,6 +5,7 @@
 - `apply-reactions.js`: `toLayer` for scroll targets and component variants, component sets count as screens, stops on links to their own screen, reports per layer write failures.
 - `apply-motion.js`: `draw-path` checks for an open vector with a centered stroke before it writes.
 - Prototype skill: tested and documented swap, change to, scroll to, and key presses.
+- Gotchas 26 to 31 and nine capability rows recorded from the run (overlay settings are read only, scroll enum, own screen links, path trim, variant clones, variant reactions on instances).
 
 ## 0.6.0
 - Added `/figma-learn` and `add-gotcha.mjs`.

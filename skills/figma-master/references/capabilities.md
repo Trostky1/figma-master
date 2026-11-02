@@ -20,7 +20,15 @@ Tested 2026-11-02 on a Full seat, student tier, with the official remote Figma M
 | Set flow starting point | Works | Assign `page.flowStartingPoints = [{nodeId, name}]`. There is no `setFlowStartingPointsAsync`. A new file already has a default "Flow 1". |
 | Failed script leaves the file unchanged | Observed | A script that throws is rolled back, including nodes it made earlier in the same call. |
 | `typeof node.missingProp` | Throws | In the sandbox, reading an unknown property on a node throws. Wrap probes in try/catch. |
-| Action `SWAP`, `CHANGE_TO`, `SCROLL_TO`, `ON_KEY_DOWN` | Not tested | |
+| Action `SWAP` between two overlays | Works (2026-11-02) | Written and read back. Not played. |
+| Action `CHANGE_TO` on component variants (hover, press, click) | Works | Reactions live on the variants and show on instances. |
+| Action `SCROLL_TO` with `SCROLL_ANIMATE` | Works | Frame needs `overflowDirection = "VERTICAL"`. Target is a layer inside it. |
+| Triggers `ON_KEY_DOWN` (K is 75, Esc is 27) and `AFTER_TIMEOUT` | Write and read back fine | Not played, so real key behavior is unseen. |
+| Overlay position, background, click outside | Read only | Cannot be set in code. |
+| `setBoundVariable("visible", booleanVariable)` | Works | Used for a notes panel driven by a prototype variable. |
+| `setExplicitVariableModeForCollection` on a frame | Works | One frame shows Light, another Dark, side by side. |
+| Text style `fontSize` bound to a variable | Works | Changing the token moved the style (11 to 12). |
+| Real video frame check (Motion lab, 3.2 s, 8 frames, 34 KB) | Works | Fade, rise, slide, pop in order. The check mark drew in three steps. |
 | Variable collection with Light and Dark, 13 tokens, alias | Works | Created, re-read, matched. Re-running the sync changed nothing (13 unchanged). |
 | Scopes `FRAME_FILL`, `SHAPE_FILL`, `TEXT_FILL`, `STROKE_COLOR`, `GAP`, `CORNER_RADIUS`, `FONT_SIZE`, `FONT_WEIGHT`, `FONT_FAMILY` | Accepted | Used by `sync-tokens.js`. |
 | `setBoundVariable('cornerRadius', v)` | Works | Binds the four per-corner fields. The reader checks `topLeftRadius`. |
