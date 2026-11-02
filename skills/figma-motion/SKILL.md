@@ -48,6 +48,8 @@ Load `figma-use` and `figma-use-motion` before any `use_figma` call. Pass `skill
 
 Recipes and numbers: `references/recipes.md`.
 
+`draw-path` needs an open VECTOR layer with a CENTER aligned stroke and no dashes. Figma refuses path trim on closed shapes and on inside or outside strokes. The script checks this first and names the layer.
+
 ## Frame check
 
 `get_screenshot` shows only the resting frame. To see motion:

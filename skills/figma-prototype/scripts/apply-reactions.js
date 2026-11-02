@@ -5,14 +5,18 @@
 //
 // Supported action types: NODE, BACK, CLOSE, URL, SET_VARIABLE (BOOLEAN, FLOAT, STRING),
 // SET_VARIABLE_MODE, CONDITIONAL (variable alias conditions on BOOLEAN variables).
+// NODE navigation: NAVIGATE, OVERLAY, SWAP, SCROLL_TO (use toLayer), CHANGE_TO (use toLayer, a variant).
+// Triggers pass through as given, for example ON_KEY_DOWN with device and keyCodes.
 
 const SPEC = __SPEC__;
 const errors = [];
 const page = figma.currentPage;
 
-// Top level screens: frames on the page, or inside sections.
+// Top level screens: frames, components, and component sets on the page, or inside sections.
+// (Component sets matter for CHANGE_TO: reactions live on the variants.)
+const SCREEN_TYPES = ["FRAME", "COMPONENT", "COMPONENT_SET"];
 const topFrames = page.children.flatMap((n) =>
-  n.type === "SECTION" ? n.children.filter((c) => c.type === "FRAME") : n.type === "FRAME" ? [n] : []
+  n.type === "SECTION" ? n.children.filter((c) => SCREEN_TYPES.includes(c.type)) : SCREEN_TYPES.includes(n.type) ? [n] : []
 );
 const byName = new Map();
 for (const f of topFrames) {
@@ -47,9 +51,10 @@ const variable = (name) => {
 const resolveAction = (a) => {
   switch (a.type) {
     case "NODE": {
-      const d = screen(a.to);
+      // "to" is a screen name. "toLayer" is "Screen/Layer", for SCROLL_TO targets and CHANGE_TO variants.
+      const d = a.toLayer ? layer(a.toLayer) : screen(a.to);
       if (!d) return null;
-      const { to, ...rest } = a;
+      const { to, toLayer, ...rest } = a;
       return { ...rest, destinationId: d.id, navigation: a.navigation || "NAVIGATE", transition: a.transition || null };
     }
     case "SET_VARIABLE": {
@@ -91,6 +96,11 @@ const resolveAction = (a) => {
   }
 };
 
+// Figma rejects a plain NAVIGATE link that points at its own screen. Catch it here, before any write.
+const ownerScreen = (n) => { let p = n; while (p && !topFrames.includes(p)) p = p.parent; return p; };
+const flatActions = (acts) =>
+  acts.flatMap((a) => (a && a.type === "CONDITIONAL" ? flatActions((a.conditionalBlocks || []).flatMap((b) => (b ? b.actions : []))) : a ? [a] : []));
+
 // Resolve everything first.
 const plan = new Map();
 for (const link of SPEC.links || []) {
@@ -98,6 +108,12 @@ for (const link of SPEC.links || []) {
   const actions = (link.actions || []).map(resolveAction);
   if (!node) continue;
   if (!link.trigger || !link.trigger.type) { errors.push("Missing trigger on " + link.from); continue; }
+  const own = ownerScreen(node);
+  for (const a of flatActions(actions)) {
+    if (a.type === "NODE" && a.navigation === "NAVIGATE" && own && a.destinationId === own.id) {
+      errors.push('"' + link.from + '" links to its own screen. Remove it (Figma rejects it).');
+    }
+  }
   if (!plan.has(node.id)) plan.set(node.id, { node, reactions: [] });
   plan.get(node.id).reactions.push({ trigger: link.trigger, actions });
 }
@@ -112,14 +128,19 @@ if (errors.length) return { applied: false, errors };
 
 // Apply.
 const results = [];
+const failures = []; // names resolved fine but Figma refused the write for that layer
 for (const { node, reactions } of plan.values()) {
   const existing = SPEC.mode === "append" ? node.reactions : [];
-  await node.setReactionsAsync([...existing, ...reactions]);
-  results.push({ id: node.id, name: node.name, reactionCount: node.reactions.length, expected: existing.length + reactions.length });
+  try {
+    await node.setReactionsAsync([...existing, ...reactions]);
+    results.push({ id: node.id, name: node.name, reactionCount: node.reactions.length, expected: existing.length + reactions.length });
+  } catch (e) {
+    failures.push({ id: node.id, name: node.name, error: String(e).slice(0, 220) });
+  }
 }
 let sp = "not requested";
 if (startingPoints) {
   try { page.flowStartingPoints = startingPoints; sp = { ok: true, now: page.flowStartingPoints }; }
   catch (e) { sp = { ok: false, error: String(e).slice(0, 160) }; }
 }
-return { applied: true, nodes: results, startingPoints: sp, mismatches: results.filter((r) => r.reactionCount !== r.expected) };
+return { applied: failures.length === 0, nodes: results, failures, startingPoints: sp, mismatches: results.filter((r) => r.reactionCount !== r.expected) };

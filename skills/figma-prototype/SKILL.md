@@ -80,9 +80,23 @@ Easing: `EASE_OUT` for things that arrive. `EASE_IN_AND_OUT` for things that mov
 
 ## Tested and not tested
 
-Tested on 2026-11-02: `NODE` with `NAVIGATE` and `OVERLAY`, `SMART_ANIMATE`, `MOVE_IN`, `PUSH`, `DISSOLVE`, `BACK`, `CLOSE`, `URL`, `SET_VARIABLE`, `CONDITIONAL` with a boolean alias, `SET_VARIABLE_MODE`, and flow starting points.
+Tested on 2026-11-02 (real file, 34 links on 7 screens plus 6 component variants): `NODE` with `NAVIGATE`, `OVERLAY`, `SWAP`, `SCROLL_TO`, and `CHANGE_TO`; `SMART_ANIMATE`, `MOVE_IN`, `PUSH`, `DISSOLVE`, `SCROLL_ANIMATE`; triggers `ON_CLICK`, `ON_HOVER`, `ON_PRESS`, `AFTER_TIMEOUT`, and `ON_KEY_DOWN` (written, read back, and flow checked); `BACK`, `CLOSE`, `URL`, `SET_VARIABLE`, `CONDITIONAL` with a boolean alias, `SET_VARIABLE_MODE`, and flow starting points.
 
-Not yet tested: `SWAP`, `CHANGE_TO` (interactive components), `SCROLL_TO`, `ON_KEY_DOWN`, media actions, overlay position settings, and `EXPRESSION` conditions (these failed). If asked for one, say it is untested, try it on a copy, and read the reactions back.
+Written and read back, but not played: how any of it feels. Key presses and timeouts only prove they were stored.
+
+Not tested: media actions, `ON_DRAG`, mouse enter and leave, and `EXPRESSION` conditions (these failed).
+
+Overlay position, background, and click outside settings are read only in the Plugin API. A new overlay uses Figma's defaults. Say so if the user wants a dimmed backdrop; they must set it by hand.
+
+A plain `NAVIGATE` link to its own screen is rejected. The script stops before writing and names the layer.
+
+## Extra spec fields
+
+- `"toLayer": "Screen/Layer"` replaces `to` when the destination is a layer, not a screen. Use it for `SCROLL_TO` (a section inside a scrolling frame) and `CHANGE_TO` (a variant inside a component set).
+- Component sets and components on the page count as screens, so `from` can be `Button/Style=Primary, State=Default`.
+- `CHANGE_TO` reactions live on the variants. Run the script on the page that holds the component set.
+- A scrolling frame needs `overflowDirection = "VERTICAL"` (the accepted values are `NONE`, `HORIZONTAL`, `VERTICAL`, `BOTH`).
+- If Figma refuses the write for one layer after names resolved, the script keeps going and lists it under `failures`. Check `applied`.
 
 ## Output
 

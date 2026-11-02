@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.1
+- Ran every skill on a real mock app (see `examples/figma-skill-tests/`).
+- `apply-reactions.js`: `toLayer` for scroll targets and component variants, component sets count as screens, stops on links to their own screen, reports per layer write failures.
+- `apply-motion.js`: `draw-path` checks for an open vector with a centered stroke before it writes.
+- Prototype skill: tested and documented swap, change to, scroll to, and key presses.
+
 ## 0.6.0
 - Added `/figma-learn` and `add-gotcha.mjs`.
 - Added offline checks (`npm test`): file structure, script behavior, round trips.

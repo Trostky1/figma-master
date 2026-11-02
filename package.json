@@ -1,6 +1,6 @@
 {
   "name": "figma-master",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "private": true,
   "description": "figma-master Claude Code plugin. No dependencies. Run npm test for the offline checks.",
   "type": "module",

@@ -70,6 +70,11 @@ for (const t of SPEC.targets || []) {
   if (t.children && !list.length) errors.push('"' + t.layer + '" has no children to animate.');
   list.forEach((node, i) => {
     if (isTop(node)) { errors.push('"' + node.name + '" is a top level frame. Animate its children instead.'); return; }
+    // Figma refuses path trim on closed shapes and on inside or outside strokes.
+    if (t.recipe === "draw-path") {
+      if (node.type !== "VECTOR") errors.push('"' + node.name + '": draw-path needs an open VECTOR layer, found ' + node.type + ".");
+      else if (node.strokeAlign !== "CENTER") errors.push('"' + node.name + '": draw-path needs strokeAlign CENTER (it is ' + node.strokeAlign + ").");
+    }
     jobs.push({ node, t, recipe, delay: (t.delay || 0) + (t.children ? i * (t.step ?? 0.06) : 0) });
   });
 }

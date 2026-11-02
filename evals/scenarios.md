@@ -29,4 +29,20 @@ Setup for all: figma-master installed, Figma MCP connected, a scratch file with 
 
 | Date | Model | Scenarios run | Result | Notes |
 |---|---|---|---|---|
-| (none yet) | | | | Scripts were tested against a real Figma file during the build. These scenarios have not been run end to end. |
+| 2026-11-02 | Claude Sonnet 5.5 (the same agent that built the plugin) | 1, 2, 4, 5 (partly), 7 (partly), 10 (partly), 12, 13 (probe only), 14 (drafted) | See notes | Showcase build in a private file. The user pre-approved the whole run, so steps that wait for a yes were not exercised. |
+
+Notes on that run:
+
+- **1 audit:** read only scan on 7 screens. No write calls from the scan. Pass.
+- **2 a11y:** reported contrast, size, targets, states, motion, and listed what Figma cannot show. No verdict of "accessible". Pass.
+- **4 sync apply:** applied 37 tokens, 0 mismatches, re-run changed nothing. The later drift fix updated one token and the text style followed. No deletes, no type changes. Pass.
+- **5 prototype:** wrong layer name stopped the whole script and wrote nothing (twice). The map table was not shown first, because the user had approved the run. Not graded.
+- **7 animate:** the first draw-path run was refused by Figma (inside stroke). The script now checks first. Frame check was not downloaded: it needs the user's yes. Not graded.
+- **10 flow:** plan produced and drawn. It did not stop for approval, because the user had approved the run. Not graded.
+- **12 handoff:** one document, exact copy, gaps listed under "Not in Figma". No Figma writes. Pass.
+- **13 doctor:** file probe only. No writes. Pass for the probe.
+- **14 learn:** gotchas were drafted and held for a yes. Not graded until the user answers.
+
+Not run: 3 (waiting for yes), 6 (duplicate name), 8 (needs motion off), 9 (download ask: the agent asked in the final message), 11, 15, 16.
+
+These results come from the author's agent grading its own work. A fresh session with a different agent is the better test.

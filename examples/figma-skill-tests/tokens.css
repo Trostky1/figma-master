@@ -1,0 +1,60 @@
+/* figma skill tests: mock app tokens. Paper, ink, gold, patina. */
+:root {
+  --color-bg-page: #f7f7f7;
+  --color-bg-raised: #fdfdfd;
+  --color-bg-deep: #efefef;
+  --color-text-strong: #111111;
+  --color-text-body: #2b2b2b;
+  --color-text-muted: #5c5c5c;
+  --color-border-line: #dcdcdc;
+  --color-accent-gold: #f2b705;
+  --color-accent-gold-deep: #8a6500;
+  --color-accent-patina: #2bb3a6;
+  --color-accent-patina-deep: #0e7a74;
+  --color-accent-vermilion: #b4442b;
+  --color-on-gold: #1a1608;
+  --color-surface-ink: #111111;
+  --color-text-on-ink: #fdfdfd;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  --radius-sm: 3px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+
+  --font-size-xs: 12px;
+  --font-size-sm: 13px;
+  --font-size-md: 15px;
+  --font-size-lg: 18px;
+  --font-size-xl: 24px;
+  --font-size-2xl: 40px;
+  --font-size-display: 72px;
+
+  --font-family-display: "Alumni Sans", sans-serif;
+  --font-family-body: "Albert Sans", sans-serif;
+  --font-family-mono: "JetBrains Mono", monospace;
+
+  --shadow-card: 0 1px 2px rgba(0,0,0,.08);
+}
+[data-theme="dark"] {
+  --color-bg-page: #121212;
+  --color-bg-raised: #1b1b1b;
+  --color-bg-deep: #0c0c0c;
+  --color-text-strong: #f5f5f5;
+  --color-text-body: #dcdcdc;
+  --color-text-muted: #a3a3a3;
+  --color-border-line: #333333;
+  --color-accent-gold-deep: #e0a800;
+  --color-accent-patina-deep: #5fd8cc;
+  --color-accent-vermilion: #e2705a;
+  --color-surface-ink: #f5f5f5;
+  --color-text-on-ink: #111111;
+}
