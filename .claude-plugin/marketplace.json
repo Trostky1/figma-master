@@ -1,0 +1,14 @@
+{
+  "name": "figma-master",
+  "description": "figma-master: a Claude Code plugin that joins Figma's own skills into one workflow with safety checks, tested scripts, and offline evals.",
+  "owner": {
+    "name": "Benjamin Trost"
+  },
+  "plugins": [
+    {
+      "name": "figma-master",
+      "source": "./",
+      "description": "One entry point for Claude Code and Figma: flows, screens, prototypes, motion, token sync, handoff, audits, and accessibility checks."
+    }
+  ]
+}

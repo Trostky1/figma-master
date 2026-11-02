@@ -38,9 +38,7 @@ Always load `figma-use` before any `use_figma` call. Add the rows that match.
 
 If a skill in the table is not installed, say so and continue with `figma-use` rules only. Do not invent its rules.
 
-Available commands: `/figma-doctor`, `/figma-flow`, `/figma-design`, `/figma-prototype`, `/figma-animate`, `/figma-sync`, `/figma-handoff`, `/figma-audit`, `/figma-a11y`.
-
-Planned for later versions (not available yet): `/figma-learn`.
+Available commands: `/figma-doctor`, `/figma-flow`, `/figma-design`, `/figma-prototype`, `/figma-animate`, `/figma-sync`, `/figma-handoff`, `/figma-audit`, `/figma-a11y`, `/figma-learn`.
 
 ## Step 2: Rules for every write
 
@@ -64,7 +62,7 @@ Planned for later versions (not available yet): `/figma-learn`.
 
 ## Step 4: Learn
 
-When a call fails in a new way, tell the user in one line, and offer to add it to `references/gotchas.md`. Only write it with their yes.
+When a call fails in a new way, tell the user in one line, and offer `/figma-learn` to add it to `references/gotchas.md`. Only write it with their yes.
 
 ## References (load only when needed)
 

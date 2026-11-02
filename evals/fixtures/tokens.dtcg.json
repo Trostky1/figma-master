@@ -1,0 +1,15 @@
+{
+  "color": {
+    "$type": "color",
+    "ink": { "$value": "#111111" },
+    "accent": { "$value": "#ff5500" },
+    "link": { "$value": "{color.accent}" }
+  },
+  "space": {
+    "sm": { "$type": "dimension", "$value": "8px" },
+    "md": { "$type": "dimension", "$value": "1rem" }
+  },
+  "font": {
+    "family": { "body": { "$type": "fontFamily", "$value": ["Inter", "sans-serif"] } }
+  }
+}
