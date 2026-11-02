@@ -27,7 +27,10 @@ Tested 2026-11-02 on a Full seat, student tier, with the official remote Figma M
 | Custom animation styles API | Available | |
 | Keyframes on a top-level frame | Accepted | Docs say avoid it. Animate children. |
 | Static move adds a keyframe | No | Write tracks yourself. |
-| `export_video` | Works | Returns a download URL that expires. |
-| `get_motion_context` | Works | Returns motion.dev snippets and timeline groups. |
-| ffmpeg | Not bundled | Needed to cut frames from the video. |
+| `SCALE_XY` keyframes with a vector value | Works | `{type:'VECTOR', value:{x,y}}`. |
+| Stagger by offsetting keyframe times per layer | Works | Read back and `get_motion_context` both matched. |
+| `export_video` | Works | Rendered at once for a small 2 s timeline. Returns a download URL that expires in about a week. |
+| `get_motion_context` | Works | Returns motion.dev snippets and timeline groups. Every track has `repeat: Infinity`, and the whole timeline (2 s default) is one loop. Trim for one time entrances. |
+| ffmpeg | Not bundled | Needed to cut frames from the video. `extract-frames.mjs` finds it on PATH or in the winget folder. |
+| Frame cutter and contact sheet | Works | Tested on a synthetic video. Not yet tested on a real Figma export (needs a download). |
 | Read rate limits | Not hit | Write tools are exempt. View and Collab seats are very limited. |

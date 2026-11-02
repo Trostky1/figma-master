@@ -20,3 +20,7 @@ Each item was met in real use. Add new ones only with the user's yes.
 | 14 | `setReactionsAsync` replaces ALL reactions on a node. | Read `node.reactions` first and pass `[...existing, ...new]` to keep them. |
 | 15 | Smart Animate between frames with no shared layer names acts like a dissolve. | Give the same layer the same name in both frames. |
 | 16 | New files already have a flow starting point named "Flow 1". | Overwrite `page.flowStartingPoints` to set your own. |
+| 17 | Asking ffmpeg for a frame at the very end of a video writes nothing and still exits quietly. | Stay about 0.15 s before the end. `extract-frames.mjs` does this and retries once. |
+| 18 | Timeline default is 2 s. Short animations then play with a long still tail in a loop. | Check `timelines`. The motion script only extends it. Shorten by hand only if the user asks. |
+| 19 | Exported motion code loops forever (`repeat: Infinity`). | Remove the repeat for one time entrances. |
+| 20 | Two recipes on one layer that write the same field replace each other. | Use different recipes per layer, or give the later one a different field. |

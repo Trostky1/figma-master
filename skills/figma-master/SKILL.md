@@ -26,7 +26,7 @@ Always load `figma-use` before any `use_figma` call. Add the rows that match.
 | Accessibility check (read-only) | `figma-a11y` (ours), `figma-use` | WCAG 2.2 AA. Lists what Figma cannot show. |
 | Build components, variants, tokens | `figma-use`, `figma-generate-library` | Variables before components. |
 | Prototype links, Smart Animate, flows | `figma-prototype` (ours), `figma-use` | Needs an approved interaction map. Reference: `references/prototype.md`. |
-| Keyframes, easing, timelines | `figma-use`, `figma-use-motion` | See `references/motion.md`. Stop if the motion flag is off. |
+| Motion inside a screen (fade, rise, stagger, press) | `figma-motion` (ours), `figma-use`, `figma-use-motion` | Recipes, intensity dial, frame check. Stops if the motion flag is off. Notes: `references/motion.md`. |
 | Motion to code (motion.dev, CSS) | `get_motion_context`, `figma-implement-motion` | |
 | Figma frame to code | `figma-design-to-code` | |
 | Code Connect | `figma-code-connect` | |
@@ -36,9 +36,9 @@ Always load `figma-use` before any `use_figma` call. Add the rows that match.
 
 If a skill in the table is not installed, say so and continue with `figma-use` rules only. Do not invent its rules.
 
-Available commands: `/figma-doctor`, `/figma-flow`, `/figma-design`, `/figma-prototype`, `/figma-audit`, `/figma-a11y`.
+Available commands: `/figma-doctor`, `/figma-flow`, `/figma-design`, `/figma-prototype`, `/figma-animate`, `/figma-audit`, `/figma-a11y`.
 
-Planned for later versions (not available yet): `/figma-animate`, `/figma-sync`, `/figma-handoff`, `/figma-learn`.
+Planned for later versions (not available yet): `/figma-sync`, `/figma-handoff`, `/figma-learn`.
 
 ## Step 2: Rules for every write
 

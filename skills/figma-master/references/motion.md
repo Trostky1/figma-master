@@ -2,6 +2,8 @@
 
 Load `figma-use-motion` too. It holds the full keyframe shapes. This file adds the checks and defaults.
 
+For real work, use the `figma-motion` skill. It has tested recipes, an apply script, and a frame cutter (`extract-frames.mjs`). This file is the short background.
+
 ## Gate
 
 Motion can be off for an account. The first motion call then throws "is not a supported API". Stop. Tell the user motion is off. Do not retry.
