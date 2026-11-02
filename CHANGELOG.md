@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.7.0
+- Format profiles (`profiles/`), starting with `presentation.json`.
+- `/figma-new`: asks the format and the style first. Claude's default look is not a style.
+- `/figma-rip`: page read (`rip-dom.js`), image read (`rip-image.mjs`), and `rip-to-style.mjs` that writes a style kit (DTCG tokens, `DESIGN.md`, components, evidence, provenance). Ask before every read. Values only.
+- `/figma-deck`: Figma Slides decks from a style kit, with `deck-check.js` (text size, overlap, contrast, density, layout variety, style fidelity per section).
+- `/figma-here`: pointing by copy-link-to-selection. `parse-figma-link.mjs`. Tested that the remote sandbox does not see the live selection.
+- `docs/branches-research.md`: research on branches, ripping styles, and selection.
+- Tested: the same content in two different styles (a page read, and a Mobbin image plus chosen fonts). Checking deck A against kit B scored 46 on purpose.
+
 ## 0.6.1
 - Ran every skill on a real mock app (see `examples/figma-skill-tests/`).
 - `apply-reactions.js`: `toLayer` for scroll targets and component variants, component sets count as screens, stops on links to their own screen, reports per layer write failures.

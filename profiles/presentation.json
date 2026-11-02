@@ -1,0 +1,17 @@
+{
+  "format": "presentation",
+  "name": "Presentation (Figma Slides)",
+  "status": "built",
+  "numbersAre": "working defaults. Test and change them with evidence. Each one can be overridden by a style kit or by the user.",
+  "canvas": { "width": 1920, "height": 1080, "unit": "px", "structure": "Slide grid. Each row is a named section. Each slide is a frame." },
+  "margins": { "edge": 96, "note": "Shapes and large display type may bleed off an edge on purpose. Body text stays inside." },
+  "type": { "titleMin": 96, "headerMin": 64, "bodyMin": 28, "captionMin": 22, "labelMin": 20, "absoluteFloor": 18, "maxFamilies": 3 },
+  "density": { "wordsPerSlide": 60, "bulletsPerSlide": 5, "cardsPerSlide": 6, "codeLines": 10, "rule": "One idea per slide. Split before you shrink." },
+  "contrast": { "body": 4.5, "large": 3, "largeTextPx": 40 },
+  "layout": { "maxConsecutiveSameLayout": 2, "nonTextElementPerSlide": 1, "signatureElements": 1, "sectionsWhenSlidesAtLeast": 12, "hierarchyRatioMin": 1.8 },
+  "bleedAllowedTextPx": 300,
+  "motion": { "between": "short dissolve or Smart Animate", "durationSec": [0.2, 0.5], "reducedMotion": "fade only" },
+  "export": { "built": ["Figma Slides"], "later": ["PPTX", "HTML"] },
+  "skills": ["figma-use", "figma-use-slides", "figma-deck", "figma-rip"],
+  "notObservable": ["Speaker notes", "How it looks when projected", "Slide transitions (check in Present mode)", "Font availability on another machine"]
+}

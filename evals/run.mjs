@@ -107,7 +107,7 @@ test("every script parses", () => {
       const r = spawnSync(process.execPath, ["--check", f], { encoding: "utf8" });
       assert(r.status === 0, `${relative(ROOT, f)}: ${r.stderr.split("\n")[0]}`);
     } else {
-      const src = readFileSync(f, "utf8").replace(/__SPEC__/g, "{}").replace(/__ROOT_ID__/g, "x").replace(/__COLLECTION__/g, "x");
+      const src = readFileSync(f, "utf8").replace(/__SPEC__/g, "{}").replace(/__PROFILE__/g, "{}").replace(/__STYLE__/g, "{}").replace(/__ROOT_ID__/g, "x").replace(/__COLLECTION__/g, "x");
       try { new Function("return (async()=>{" + src + "\n})")(); } catch (e) { throw new Error(`${relative(ROOT, f)}: ${e.message}`); }
     }
   }
@@ -123,8 +123,11 @@ test("Figma scripts are read-only unless named apply, sync, or motion", () => {
 test("each Figma script has its placeholder exactly once", () => {
   for (const f of scriptFiles.filter((x) => x.endsWith(".js"))) {
     const s = readFileSync(f, "utf8");
-    const found = ["__SPEC__", "__ROOT_ID__", "__COLLECTION__"].filter((p) => s.includes(p));
-    if (basename(f) === "check-flow.js") { assert(found.length === 0, "check-flow.js scans the current page and needs no input"); continue; }
+    const found = ["__SPEC__", "__ROOT_ID__", "__COLLECTION__", "__PROFILE__", "__STYLE__"].filter((p) => s.includes(p));
+    // scripts that need no input (they read the current page, or run in a browser)
+    if (["check-flow.js", "rip-dom.js"].includes(basename(f))) { assert(found.length === 0, `${basename(f)} needs no input but has a placeholder`); continue; }
+    // scripts with two inputs
+    if (basename(f) === "deck-check.js") { assert(found.length === 2 && found.includes("__PROFILE__") && found.includes("__STYLE__"), "deck-check.js needs __PROFILE__ and __STYLE__"); continue; }
     assert(found.length === 1, `${basename(f)}: expected one placeholder, found ${found.join(", ") || "none"}`);
     const count = s.split(found[0]).length - 1;
     assert(count >= 1, `${basename(f)}: placeholder missing`);
@@ -281,6 +284,75 @@ test("extract-frames: cuts frames and a sheet from a synthetic video", () => {
     assert(j.sheet && existsSync(j.sheet), "sheet missing");
     assert(node("skills/figma-motion/scripts/extract-frames.mjs", join(tmp, "nope.mp4"), join(tmp, "o2"), "auto:4").status === 4, "missing video should exit 4");
   } finally { rmSync(tmp, { recursive: true, force: true }); }
+});
+
+// ------------------------------------------------------------ profiles, rip, link parser
+test("profile presentation.json is valid and has the numbers audits need", () => {
+  const p = JSON.parse(read("profiles/presentation.json"));
+  for (const k of ["canvas", "type", "density", "contrast", "layout", "notObservable"]) assert(p[k], "missing " + k);
+  assert(p.canvas.width === 1920 && p.canvas.height === 1080, "slide size");
+  assert(p.type.absoluteFloor < p.type.labelMin && p.type.labelMin <= p.type.captionMin && p.type.captionMin <= p.type.bodyMin, "type minimums must be in order");
+  assert(p.contrast.body >= 4.5, "body contrast must be at least 4.5");
+});
+test("profiles README lists every profile file", () => {
+  const files = readdirSync(join(ROOT, "profiles")).filter((f) => f.endsWith(".json"));
+  const r = read("profiles/README.md");
+  for (const f of files) assert(r.includes(f), `profiles/README.md does not list ${f}`);
+});
+const RIP_STYLE = "skills/figma-rip/scripts/rip-to-style.mjs";
+test("rip-to-style: roles, source variable names, tokens figma-sync can read, provenance", () => {
+  const tmp = mkdtempSync(join(tmpdir(), "fm-eval-"));
+  try {
+    const r = node(RIP_STYLE, join(FIX, "rip-impeccable.json"), join(tmp, "style"), "--name", "fixture");
+    assert(r.status === 0, r.stderr);
+    for (const f of ["tokens.json", "tokens.css", "DESIGN.md", "components.json", "evidence.json", "provenance.md"]) assert(existsSync(join(tmp, "style", f)), "missing " + f);
+    const ev = JSON.parse(readFileSync(join(tmp, "style", "evidence.json"), "utf8"));
+    assert(ev.roles.page === "#fdfdfd", "page color " + ev.roles.page);
+    assert(ev.roles.strong === "#070707", "strong text " + ev.roles.strong);
+    assert(ev.families.display === "Alumni Sans Hero", "display font " + ev.families.display);
+    assert(ev.type.display.figmaFamilyGuess === "Alumni Sans", "figma family guess");
+    const md = readFileSync(join(tmp, "style", "DESIGN.md"), "utf8");
+    assert(md.includes("--ks-patina") && md.includes("--ks-kinpaku"), "accent roles should name the site's own variables");
+    assert(md.includes("needs human review"), "status line");
+    const spec = node(SPEC_JS, join(tmp, "style", "tokens.json"));
+    assert(spec.status === 0, "tokens.json should read with tokens-to-spec: " + spec.stderr);
+    const s = JSON.parse(spec.stdout);
+    assert(s.tokens.some((t) => t.name === "color/bg/page"), "color/bg/page missing from the spec");
+    assert(s.tokens.some((t) => t.name === "font/family/display"), "font family token missing");
+    assert(readFileSync(join(tmp, "style", "provenance.md"), "utf8").includes("NOT copied"), "provenance must list what was not copied");
+  } finally { rmSync(tmp, { recursive: true, force: true }); }
+});
+test("rip-image: finds the page color and an accent in a made-up image", () => {
+  const ffcmd = spawnSync("ffmpeg", ["-version"], { encoding: "utf8" }).status === 0 ? "ffmpeg" : (process.env.LOCALAPPDATA && existsSync(join(process.env.LOCALAPPDATA, "Microsoft", "WinGet", "Packages")) ? walk(join(process.env.LOCALAPPDATA, "Microsoft", "WinGet", "Packages")).find((p) => /ffmpeg\.exe$/i.test(p)) : null);
+  if (!ffcmd) return { skip: "ffmpeg not installed" };
+  const tmp = mkdtempSync(join(tmpdir(), "fm-eval-"));
+  try {
+    const png = join(tmp, "t.png");
+    const mk = spawnSync(ffcmd, ["-y", "-v", "error", "-f", "lavfi", "-i", "color=c=0xfdfcfc:s=400x300:d=1,drawbox=x=40:y=40:w=120:h=80:color=0xee5533:t=fill,drawbox=x=0:y=270:w=400:h=30:color=0x111111:t=fill", "-frames:v", "1", png], { encoding: "utf8" });
+    assert(mk.status === 0, "could not make the test image");
+    const r = node("skills/figma-rip/scripts/rip-image.mjs", png, join(tmp, "out.json"), "--trim-bottom", "0.1");
+    assert(r.status === 0, r.stderr);
+    const j = JSON.parse(readFileSync(join(tmp, "out.json"), "utf8"));
+    const near = (a, b) => Math.sqrt([1, 3, 5].reduce((s, i) => s + (parseInt(a.slice(i, i + 2), 16) - parseInt(b.slice(i, i + 2), 16)) ** 2, 0));
+    assert(near(j.bgColors[0].c, "#fdfcfc") < 6, "page color " + j.bgColors[0].c);
+    assert(j.textColors.some((t) => near(t.c, "#ee5533") < 10), "accent not found");
+    assert(!j.bgColors.some((b) => near(b.c, "#111111") < 10 && b.areaShare > 0.02), "the bottom bar should have been trimmed");
+    assert(j.confidence && j.confidence.fonts === "none", "must say fonts were not read");
+  } finally { rmSync(tmp, { recursive: true, force: true }); }
+});
+test("parse-figma-link: design, slides, branch, no node, and a wrong host", () => {
+  const P = "skills/figma-here/scripts/parse-figma-link.mjs";
+  const run = (u) => JSON.parse(node(P, u).stdout);
+  const a = run("https://www.figma.com/design/ABC123/My-File?node-id=7-6&t=x");
+  assert(a.ok && a.kind === "design" && a.fileKey === "ABC123" && a.nodeId === "7:6", "design link");
+  const b = run("https://www.figma.com/slides/XYZ789/Deck?node-id=5-5");
+  assert(b.ok && b.kind === "slides" && b.nodeId === "5:5", "slides link");
+  const c = run("https://www.figma.com/design/ABC123/branch/BR456/My-File?node-id=1-2");
+  assert(c.ok && c.fileKey === "BR456" && c.branchKey === "BR456", "branch link uses the branch key");
+  const d = run("https://www.figma.com/design/ABC123");
+  assert(d.ok && !d.hasNode && d.warnings.length > 0, "a link without a node id should warn");
+  assert(node(P, "https://example.com/design/x").status === 3, "wrong host should exit 3");
+  assert(node(P).status === 2, "no input should exit 2");
 });
 
 // ------------------------------------------------------------ learn log

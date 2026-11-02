@@ -4,12 +4,16 @@ One entry point for Claude Code and Figma.
 
 figma-master does not replace Figma's own skills. It picks the right ones for the job, adds safety and checking rules, and remembers project settings. Version 0.1 is the foundation: the router skill, a health check, and tested reference notes.
 
-## What is in v0.6
+## What is in v0.7
 
 | Piece | What it does |
 |---|---|
 | `skills/figma-master` | Router. Chooses which Figma skills to load. Sets the write, read-back, and approval rules. |
 | `/figma-doctor` | Health check. Tools, login, seat, installed skills, motion flag, ffmpeg, project memory. Read-only by default. |
+| `/figma-new` | Starts any design. Asks the format (presentation, website, mobile app, mobile site, poster) and the style first. Loads the format profile from `profiles/`. |
+| `/figma-rip` | Reads the styles of a live site, a screenshot, a Mobbin result, or a Figma file into a reviewable style kit (colors with roles, type, spacing, shapes, motion). Asks before every read. Copies values only. Writes provenance. |
+| `/figma-deck` | Builds a Figma Slides deck in a chosen style kit, then checks text size, overlap, contrast, density, layout variety, and fidelity to the kit. Tested with two very different styles on the same content. |
+| `/figma-here` | Point at a layer with a copy-link-to-selection link. Says back what it found, then changes only that part. |
 | `/figma-flow` | Plans screens, states, and paths before drawing. Plans only. Waits for approval. |
 | `/figma-design` | Builds a screen with the project's library and variables. Verifies, then audits. Wraps Figma's own design skills. |
 | `/figma-prototype` | Makes screens clickable from an approved interaction map. Name based, all or nothing apply script and a flow checker (broken links, unreachable screens, dead ends, Smart Animate name matches). |
@@ -79,6 +83,8 @@ Add `--write` to also run a write test in a new scratch file. It asks first.
 | 0.3 (done) | `/figma-prototype` for flows, triggers, variables, and logic |
 | 0.4 (done) | Motion recipes, `/figma-animate`, and the frame check loop |
 | 0.5 (done) | `/figma-sync`, code to motion bridge, `/figma-handoff` |
+| 0.7 (done) | Format profiles, presentation branch (`/figma-new`, `/figma-deck`), style reading (`/figma-rip`), pointing by link (`/figma-here`) |
+| Next | Website branch (desktop and responsive), then mobile app, mobile site, poster. Comment pins and live selection for `/figma-here`. |
 | 0.6 (done) | `/figma-learn`, offline evals, conflict rulings, publish prep |
 | Later | Untested actions (swap, change-to, scroll-to, key press), text stagger and color motion recipes, team library variables, a real run of every slash command |
 

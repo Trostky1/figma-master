@@ -14,12 +14,20 @@ A thin router. It does not replace Figma's own skills. It decides which ones to 
 3. If Figma tools are deferred, load them in ONE ToolSearch call.
 4. Call `create_session` once the file key is known. Reuse its id on every file tool call.
 
+## Style first
+
+Claude's own default look is not a style. Before drawing a deck, screen, or poster, a style kit must exist (from `figma-rip`, a brand, or a Figma library). If there is none, ask for one reference. A single screenshot is enough. Profiles in `profiles/` set the format numbers (sizes, density, contrast). A style kit never lowers those.
+
 ## Step 1: Route the task
 
 Always load `figma-use` before any `use_figma` call. Add the rows that match.
 
 | Task | Load these skills | Notes |
 |---|---|---|
+| Start any new design | `figma-new` (ours) | Asks the format and the style first. Nothing is drawn before both are settled. |
+| Slides deck in a chosen style | `figma-deck` (ours), `figma-use-slides`, `figma-use` | Needs a style kit. Profile: `profiles/presentation.json`. |
+| Read styles from a site, picture, Mobbin result, or Figma file | `figma-rip` (ours) | Asks before every read. Copies values only. Writes provenance. |
+| Point at a layer and fix it | `figma-here` (ours), `figma-use` | Needs a copy-link-to-selection link. Says back what it found first. |
 | Plan screens and paths before drawing | `figma-flow` (ours) | Plan only. Waits for approval. |
 | Build or edit a screen, modal, panel | `figma-design` (ours), which loads `figma-use` and `figma-generate-design` | Find library parts first. No hardcoded colors if variables exist. |
 | Review design quality (read-only) | `figma-audit` (ours), `figma-use` | Scores 0 to 100. Never edits. |
@@ -38,7 +46,7 @@ Always load `figma-use` before any `use_figma` call. Add the rows that match.
 
 If a skill in the table is not installed, say so and continue with `figma-use` rules only. Do not invent its rules.
 
-Available commands: `/figma-doctor`, `/figma-flow`, `/figma-design`, `/figma-prototype`, `/figma-animate`, `/figma-sync`, `/figma-handoff`, `/figma-audit`, `/figma-a11y`, `/figma-learn`.
+Available commands: `/figma-doctor`, `/figma-new`, `/figma-rip`, `/figma-deck`, `/figma-here`, `/figma-flow`, `/figma-design`, `/figma-prototype`, `/figma-animate`, `/figma-sync`, `/figma-handoff`, `/figma-audit`, `/figma-a11y`, `/figma-learn`.
 
 ## Step 2: Rules for every write
 
