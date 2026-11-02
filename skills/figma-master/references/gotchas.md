@@ -15,3 +15,8 @@ Each item was met in real use. Add new ones only with the user's yes.
 | 9 | Page context resets to the first page on every `use_figma` call. | Switch pages with `setCurrentPageAsync` once per call. |
 | 10 | A text write fails if the font is not loaded. | Load the font first. Check the style name with `listAvailableFontsAsync`. |
 | 11 | The motion API is beta and gated by a flag. | Probe first (`motion.md`). |
+| 12 | `typeof node.someMissingProp` throws instead of returning "undefined". | Wrap probes in try/catch. |
+| 13 | A thrown error rolls back the whole script, including nodes made earlier in it. A "missing" result after an error is not a bug. | Re-run the full script after the fix. |
+| 14 | `setReactionsAsync` replaces ALL reactions on a node. | Read `node.reactions` first and pass `[...existing, ...new]` to keep them. |
+| 15 | Smart Animate between frames with no shared layer names acts like a dissolve. | Give the same layer the same name in both frames. |
+| 16 | New files already have a flow starting point named "Flow 1". | Overwrite `page.flowStartingPoints` to set your own. |
