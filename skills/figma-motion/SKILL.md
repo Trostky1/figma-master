@@ -39,7 +39,7 @@ Load `figma-use` and `figma-use-motion` before any `use_figma` call. Pass `skill
 }
 ```
 
-- `layer` is `Screen name/Layer name`. Exactly one match, or the script stops.
+- `layer` is `Screen name/Layer name`. Exactly one match, or the script stops. The screen name may itself contain " / " (for example `Home / Mobile 393`): the script matches the longest screen name that starts the path.
 - `children: true` animates each direct child of `layer`, offset by `step` seconds (default 0.06). This is the stagger.
 - `delay`, `duration`, `easing` are optional per target. Easing must be a public name: `EASE_OUT`, `EASE_IN_AND_OUT`, `GENTLE`, `QUICK`. Never `EASE_IN_OUT`.
 - `reduced: true` swaps entering recipes for a short fade (0.15 s) and skips the rest.

@@ -44,7 +44,7 @@ Load `figma-use` before any `use_figma` call. Pass `skillNames: "figma-use"`.
 }
 ```
 
-- `from` is `Screen name/Layer name`. The layer name must match exactly one layer in that screen.
+- `from` is `Screen name/Layer name`. The layer name must match exactly one layer in that screen. The screen name may itself contain " / " (for example `Home / Mobile 393`): the script matches the longest screen name that starts the path.
 - `to` is a screen name. It must match exactly one top level frame.
 - `mode: "replace"` (default) replaces all reactions on each listed layer. `"append"` keeps the old ones. Tell the user which one you used.
 - Logic actions:

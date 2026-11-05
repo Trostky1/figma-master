@@ -29,12 +29,16 @@ const screen = (name) => {
   if (l.length > 1) { errors.push("Screen name not unique: " + name); return null; }
   return l[0];
 };
+// A path is "Screen name/Layer name". Screen names may contain "/" (for example "Home / Mobile 393"),
+// so match the longest screen name that prefixes the path instead of splitting on the first "/".
+const screenNames = [...byName.keys()].sort((a, b) => b.length - a.length);
 const layer = (path) => {
-  const [s, ...rest] = path.split("/");
+  const s = screenNames.find((nm) => path === nm || path.startsWith(nm + "/"));
+  if (!s) { errors.push("Screen not found for path: " + path); return null; }
   const sc = screen(s);
   if (!sc) return null;
-  if (!rest.length) return sc;
-  const nm = rest.join("/");
+  if (path === s) return sc;
+  const nm = path.slice(s.length + 1);
   const m = sc.findAll((n) => n.name === nm);
   if (m.length !== 1) { errors.push('Layer "' + nm + '" in "' + s + '": found ' + m.length + " (need exactly 1)"); return null; }
   return m[0];

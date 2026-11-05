@@ -1,6 +1,6 @@
 {
   "name": "figma-master",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "One entry point for Claude Code and Figma. Routes design, prototype, motion, token, and audit work to the right Figma skill, then checks the result.",
   "author": {
     "name": "Benjamin Trost"

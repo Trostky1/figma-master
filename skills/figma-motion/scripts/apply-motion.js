@@ -49,12 +49,16 @@ const screenByName = (name) => {
   return l[0];
 };
 const isTop = (n) => n.parent && (n.parent.type === "PAGE" || n.parent.type === "SECTION");
+// A path is "Screen name/Layer name". Screen names may contain "/" (for example "Home / Mobile 393"),
+// so match the longest screen name that prefixes the path instead of splitting on the first "/".
+const screenNameList = [...new Set(topFrames.map((f) => f.name))].sort((a, b) => b.length - a.length);
 const resolveLayer = (path) => {
-  const [s, ...rest] = path.split("/");
+  const s = screenNameList.find((nm) => path === nm || path.startsWith(nm + "/"));
+  if (!s) { errors.push("Screen not found for path: " + path); return null; }
   const sc0 = screenByName(s);
   if (!sc0) return null;
-  if (!rest.length) return sc0;
-  const nm = rest.join("/");
+  if (path === s) return sc0;
+  const nm = path.slice(s.length + 1);
   const m = sc0.findAll((n) => n.name === nm);
   if (m.length !== 1) { errors.push('Layer "' + nm + '" in "' + s + '": found ' + m.length + " (need exactly 1)"); return null; }
   return m[0];

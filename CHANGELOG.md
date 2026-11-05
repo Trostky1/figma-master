@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.9.1
+- Fix: `apply-reactions.js` and `apply-motion.js` could not find layers when the screen name contains " / " (the profile pattern `<Screen> / Mobile 393`). They split the path on the first "/". They now match the longest screen name that prefixes the path. Names without " / " behave as before. Found while wiring a 190 link prototype (Rove OS) with screens named `<Screen> / Rove 360`.
+- Docs: `figma-prototype` and `figma-motion` SKILL.md say the screen name may contain " / ". Gotcha 32 added.
+- Note: `AFTER_TIMEOUT` timeouts are milliseconds (already in `references/prototype.md`). The Plugin API typings do not state the unit.
+
 ## 0.9.0
 - `/figma-app`, `/figma-mobile-site`, `/figma-poster` with profiles (`mobile-app.json`, `mobile-site.json`, `poster.json`). Written, not tested in Figma.
 - `/figma-deslop` with `slop-scan.js`: finds AI slop in design and copy, swaps each sign for a choice from the style kit.
